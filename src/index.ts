@@ -4,9 +4,9 @@
  */
 
 export type ConsolePrefixOptions = {
-  console?: Console,
-  methods?: string[],
-  prefix?: ((prop: string) => string) | string,
+  console?: Console;
+  methods?: string[];
+  prefix?: ((prop: string) => string) | string;
 };
 
 const allMethods = ['debug', 'log', 'info', 'warn', 'error'];
@@ -18,15 +18,24 @@ export function ConsolePrefix(opt?: ConsolePrefixOptions) {
     prefix = () => new Date().toISOString(),
   }: ConsolePrefixOptions = opt || {};
   const ms = methods.filter(m => allMethods.includes(m));
-  return prefix && ms.length ? new Proxy(console, {
-    get(target, prop, receiver) {
-      const value = Reflect.get(target, prop, receiver);
-      if (typeof prop === 'string' && ms.includes(prop) && typeof value === 'function') {
-        return value.bind(target, typeof prefix === 'function' ? prefix(prop) : prefix);
-      }
-      return value;
-    }
-  }) : console;
+  return prefix && ms.length
+    ? new Proxy(console, {
+        get(target, prop, receiver) {
+          const value = Reflect.get(target, prop, receiver);
+          if (
+            typeof prop === 'string' &&
+            ms.includes(prop) &&
+            typeof value === 'function'
+          ) {
+            return value.bind(
+              target,
+              typeof prefix === 'function' ? prefix(prop) : prefix
+            );
+          }
+          return value;
+        },
+      })
+    : console;
 }
 
 export default ConsolePrefix;
