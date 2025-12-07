@@ -1,6 +1,6 @@
 {
   "name": "console-prefix-proxy",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "console prefix proxy",
   "type": "module",
   "main": "./dist/index.js",
